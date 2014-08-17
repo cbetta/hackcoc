@@ -1,5 +1,9 @@
 <div class='supporter col-xs-12 col-sm-6 col-md-4'>
-  <h3><%= supporter.name %></h3>
+  <% if supporter.is_custom %>
+    <h3><%= link_to supporter.name, "/#{supporter.slug}" %></h3>
+  <% else %>
+    <h3><%= supporter.name %></h3>
+  <% end %>
   <h4><%= supporter.title %></h4>
   <p><%= link_if supporter.hack, supporter.url %></p>
 </div>

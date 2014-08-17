@@ -1,6 +1,10 @@
 class SupportersController < InheritedResources::Base
   actions :create, :show, :new
 
+  def new
+    @supporter = Supporter.new is_supporter: true
+  end
+
   def show
     @supporter = Supporter.find_by_slug!(params[:path])
     render 'pages/index'
