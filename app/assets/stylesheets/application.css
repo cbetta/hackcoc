@@ -10,6 +10,15 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require reset
- *= require style
+ *= require bootstrap
+ *= require_tree .
  */
+
+ body {
+   font-family: 'Open Sans', sans-serif;
+ }
+
+ h1 {
+   font-family: 'Cutive Mono';
+   font-weight: bold;
+ }
