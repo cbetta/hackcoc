@@ -29,3 +29,21 @@
    margin-top: 1.2em;
    margin-bottom: .6em;
  }
+
+ h3 {
+   font-size: 1.4em;
+   font-weight: bold;
+   line-height: 0.8em;
+ }
+
+ h4 {
+   font-size: 1.2em;
+ }
+
+ .supporter p {
+   font-size: 1.2em;
+ }
+
+ .supporter {
+   min-height: 130px;
+ }

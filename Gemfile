@@ -11,6 +11,10 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',                    group: :development
-gem "bower-rails", "~> 0.8.3"
-gem "less-rails"
+gem 'bower-rails', '~> 0.8.3'
+gem 'less-rails'
 gem 'therubyracer'
+gem 'simple_form', '~> 3.1.0.rc2'
+gem 'email_validator'
+gem 'validate_url'
+gem 'inherited_resources'

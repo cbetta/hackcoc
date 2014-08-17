@@ -1,0 +1,16 @@
+<%= simple_form_for(@supporter) do |f| %>
+  <%= f.input :name, label: "Your name" %>
+  <%= f.input :title, label: "Your title" %>
+  <%= f.input :url, label: "URL for you or your hackathon", placeholder: 'http://' %>
+  <%= f.input :email, label: "Your email (won't be published)" %>
+  <%= f.input :is_custom, label: "Create a custom Code of Conduct? &nbsp;".html_safe %>
+
+  <div class='custom_form'>
+    <%= f.input :hack, label: "Hackathon name" %>
+    <%= f.input :phone, label: "Contact phone number" %>
+    <%= f.input :is_supporter, label: "Also publish your name at the bottom of this page? &nbsp;".html_safe %>
+
+  </div>
+
+  <%= f.submit "Sign the Code of Conduct", class: 'submit btn btn-primary' %>
+<% end %>
