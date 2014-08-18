@@ -39,6 +39,8 @@ GEM
       execjs
     coffee-script-source (1.7.1)
     commonjs (0.2.7)
+    domainatrix (0.0.11)
+      addressable
     email_validator (1.4.0)
       activemodel
     erubis (2.7.0)
@@ -146,6 +148,7 @@ PLATFORMS
 DEPENDENCIES
   bower-rails (~> 0.8.3)
   coffee-rails (~> 4.0.0)
+  domainatrix
   email_validator
   inherited_resources
   jbuilder (~> 2.0)
