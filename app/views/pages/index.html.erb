@@ -74,7 +74,7 @@
 </div>
 
 <div class='row'>
-  <%= render Supporter.order(:created_at) %>
+  <%= render Supporter.where(is_supporter: true).order(:created_at) %>
 </div>
 
 <h2>Notes</h2>
