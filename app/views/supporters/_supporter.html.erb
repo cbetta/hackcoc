@@ -4,6 +4,9 @@
   <% else %>
     <h3><%= supporter.name %></h3>
   <% end %>
-  <h4><%= supporter.title %></h4>
+  <h4>
+    <%= supporter.title %>
+    <%= "@ #{supporter.company}" unless supporter.company.blank? %>
+  </h4>
   <p><%= link_if supporter.hack, supporter.url %></p>
 </div>

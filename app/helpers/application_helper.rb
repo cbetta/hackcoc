@@ -8,6 +8,6 @@ module ApplicationHelper
 
   def simple_url url
     uri = Domainatrix.parse(url)
-    "#{uri.domain}.#{uri.public_suffix}#{uri.path}"
+    "#{uri.domain}.#{uri.public_suffix}#{uri.path unless uri.path == '/'}"
   end
 end

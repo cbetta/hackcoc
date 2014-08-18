@@ -24,6 +24,6 @@ class SupportersController < InheritedResources::Base
   end
 
   def permitted_params
-    params.permit(supporter: [:name, :title, :url, :email, :is_custom, :hack, :phone, :is_supporter])
+    params.permit(supporter: [:name, :title, :url, :email, :is_custom, :hack, :phone, :is_supporter, :company])
   end
 end

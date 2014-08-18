@@ -1,7 +1,8 @@
 <%= simple_form_for(@supporter) do |f| %>
   <%= f.input :name, label: "Your name" %>
-  <%= f.input :title, label: "Your title" %>
-  <%= f.input :url, label: "URL for you or your hackathon", placeholder: 'http://' %>
+  <%= f.input :title, label: "Your job title/description" %>
+  <%= f.input :company, label: "Your company or organisation" %>
+  <%= f.input :url, label: "URL for you or your hackathon or organisation", placeholder: 'http://' %>
   <%= f.input :email, label: "Your email (won't be published)" %>
   <%= f.input :is_custom, label: "Create a custom Code of Conduct? &nbsp;".html_safe %>
 
