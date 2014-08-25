@@ -46,6 +46,10 @@
    margin-bottom: 1.8em;
  }
 
+ .well p:last-child {
+   margin-bottom: 0px;
+ }
+
  .supporter p {
    font-size: 1.2em;
    margin-bottom: 0px;
