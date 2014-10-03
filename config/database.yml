@@ -77,9 +77,3 @@ test:
 #
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
-#
-production:
-  <<: *default
-  database: hackcoc_production
-  username: hackcoc
-  password: <%= ENV['HACKCOC_DATABASE_PASSWORD'] %>
