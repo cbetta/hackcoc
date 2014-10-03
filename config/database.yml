@@ -77,3 +77,9 @@ test:
 #
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
+#
+production:
+  <<: *default
+  database: <%= ENV['PGDATABASE'] %>
+  username: <%= ENV['PGPASSWORD'] %>
+  password: <%= ENV['PGUSER'] %>
