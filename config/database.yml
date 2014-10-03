@@ -79,6 +79,7 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  database: <%= ENV['PGDATABASE'] %>
-  username: <%= ENV['PGPASSWORD'] %>
-  password: <%= ENV['PGUSER'] %>
+  <<: *default
+  database: hackcoc_production
+  username: hackcoc
+  password: <%= ENV['HACKCOC_DATABASE_PASSWORD'] %>
