@@ -3,6 +3,8 @@
     If you have witnessed or experienced any transgressions of this Code of Conduct at <%= @supporter.hack %> please get in contact with:
   </p>
   <h3><%= @supporter.name %></h3>
-  <h4><%= link_to @supporter.phone, "tel:#{@supporter.phone}" %></h4>
+  <% unless @supporter.phone.blank? %>
+    <h4><%= link_to @supporter.phone, "tel:#{@supporter.phone}" %></h4>
+  <% end %>
   <h4><%= link_to @supporter.email, "mailto:#{@supporter.email}" %></h4>
 </div>
