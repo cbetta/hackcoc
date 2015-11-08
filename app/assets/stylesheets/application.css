@@ -58,4 +58,5 @@
 
  .supporter {
    min-height: 150px;
+   word-wrap: break-word;
  }
