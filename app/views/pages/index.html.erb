@@ -3,18 +3,17 @@
 </a>
 
 <h1>
-
-    <% if @supporter %>
-      <%= link_to request.original_url  do %>
-      <%= @supporter.hack %><br>
-       Code of Conduct
-      <% end %>
-    <% else %>
-      <a href="/">Hack Code of Conduct</a>
+  <% if @supporter %>
+    <%= link_to request.original_url  do %>
+    <%= @supporter.hack %><br>
+     Code of Conduct
     <% end %>
+  <% else %>
+    <a href="/">Hack Code of Conduct</a>
+  <% end %>
 </h1>
 
-<div class='ui icon warning message'>
+<div class="ui warning icon message">
   <i class='ui icon warning circle'></i>
   <div class="content">
     <p>
@@ -149,7 +148,7 @@
 
 <br><br>
 
-<div class='ui three stackable cards'>
+<div class='ui three doubling stackable cards'>
   <%= render Supporter.where(is_supporter: true).order(:created_at) %>
 </div>
 

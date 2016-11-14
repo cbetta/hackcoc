@@ -16,6 +16,7 @@ gem 'email_validator'
 gem 'validate_url'
 gem 'domainatrix'
 gem 'gravatarify'
+gem 'phony_rails'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-jquery'

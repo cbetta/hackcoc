@@ -24,6 +24,8 @@ class SupportersController < ApplicationController
       else
         redirect_to root_url(anchor: "supporters")
       end
+    else
+      render :new
     end
   end
 

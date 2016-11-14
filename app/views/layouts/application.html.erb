@@ -6,14 +6,15 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 
   <link href='http://fonts.googleapis.com/css?family=Cutive+Mono' rel='stylesheet' type='text/css'>
-
+  <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
   <%= csrf_meta_tags %>
 </head>
 <body>
 
 <div class='ui text container'>
   <%= yield %>
-  
+
   <div class="ui horizontal end divider">
     <i class='ui icon code'></i>
   </div>
