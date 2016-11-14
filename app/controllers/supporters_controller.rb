@@ -1,6 +1,4 @@
-class SupportersController < InheritedResources::Base
-  actions :create, :show, :new
-
+class SupportersController < ApplicationController
   def new
     @supporter = Supporter.new is_supporter: true
   end
@@ -11,19 +9,17 @@ class SupportersController < InheritedResources::Base
   end
 
   def create
-    create! do |success, failure|
-      success.html do
-        if resource.is_custom
-          redirect_to "/#{resource.slug}"
-        else
-          redirect_to root_url(anchor: "supporters")
-        end
+    @supporter = Supporter.new(permitted_params)
+    if @supporter.save
+      if @supporter.is_custom
+        redirect_to "/#{@supporter.slug}"
+      else
+        redirect_to root_url(anchor: "supporters")
       end
-      failure.html
     end
   end
 
   def permitted_params
-    params.permit(supporter: [:name, :title, :url, :email, :is_custom, :hack, :phone, :is_supporter, :company, :slug])
+    params.require(:supporter).permit(:name, :title, :url, :email, :is_custom, :hack, :phone, :is_supporter, :company, :slug)
   end
 end
