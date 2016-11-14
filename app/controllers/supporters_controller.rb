@@ -1,6 +1,14 @@
 class SupportersController < ApplicationController
+
+  def index
+    redirect_to :supporters
+  end
+
   def new
-    @supporter = Supporter.new is_supporter: true
+    @supporter = Supporter.new(
+      is_supporter: true,
+      is_custom: params['is_custom']
+    )
   end
 
   def show

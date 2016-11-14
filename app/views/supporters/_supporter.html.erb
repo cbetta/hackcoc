@@ -1,12 +1,28 @@
-<div class='supporter col-xs-12 col-sm-6 col-md-4'>
-  <% if supporter.is_custom %>
-    <h3><%= link_to supporter.name, "/#{supporter.slug}" %></h3>
-  <% else %>
-    <h3><%= supporter.name %></h3>
-  <% end %>
-  <h4>
-    <%= supporter.title %>
-    <%= "@ #{supporter.company}" unless supporter.company.blank? %>
-  </h4>
-  <p><%= link_if supporter.hack, supporter.url %></p>
+<div class='ui card'>
+  <div class="image">
+    <%= image_tag(
+          image_url('user.png'), class: 'lazy', data: {
+            src:  gravatar_url(supporter.email, size: 200, default: image_url('user.png'))
+          }
+        ) %>
+  </div>
+  <div class="content">
+    <div class="ui header">
+      <% if supporter.is_custom %>
+        <%= link_to supporter.name, "/#{supporter.slug}" %>
+      <% else %>
+        <%= supporter.name %>
+      <% end %>
+    </div>
+    <div class="description">
+      <%= supporter.title %>
+      <%= "@ #{supporter.company}" unless supporter.company.blank? %>
+    </div>
+  </div>
+
+  <div class="extra content">
+    <i class='ui icon linkify'></i>
+    <%= link_if supporter.hack, supporter.url %>
+
+  </div>
 </div>

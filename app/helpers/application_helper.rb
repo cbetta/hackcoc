@@ -1,13 +1,14 @@
 module ApplicationHelper
   def link_if text, url
     return nil if text.blank? && url.blank?
-    return text if url.blank?
+    return truncate(text, length: 20) if url.blank?
     return link_to simple_url(url), url if text.blank?
-    return link_to text, url
+    return link_to truncate(text, length: 20), url
   end
 
   def simple_url url
     uri = Domainatrix.parse(url)
-    "#{uri.domain}.#{uri.public_suffix}#{uri.path unless uri.path == '/'}"
+    text = "#{uri.domain}.#{uri.public_suffix}#{uri.path unless uri.path == '/'}"
+    truncate(text,  length: 20)
   end
 end

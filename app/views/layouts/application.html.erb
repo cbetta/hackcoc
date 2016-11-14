@@ -6,19 +6,19 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 
   <link href='http://fonts.googleapis.com/css?family=Cutive+Mono' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,300,700' rel='stylesheet' type='text/css'>
 
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<div class='container'>
-  <div class='col-md-8 col-md-offset-2'>
-    <%= yield %>
+<div class='ui text container'>
+  <%= yield %>
+  
+  <div class="ui horizontal end divider">
+    <i class='ui icon code'></i>
   </div>
-</div>
 
-<%= yield :fork %>
+</div>
 
 </body>
 </html>

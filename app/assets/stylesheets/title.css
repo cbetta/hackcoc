@@ -1,0 +1,23 @@
+h1 {
+  font-family: 'Cutive Mono';
+  font-weight: bold;
+  font-size: 6vw;
+  padding: 1em 0;
+  text-align: center;
+}
+
+h2 {
+  padding-top: 2em !important;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    padding-top: 2em;
+  }
+}
+
+@media (min-width: 767px) {
+  h1 {
+    font-size: 3em;
+  }
+}

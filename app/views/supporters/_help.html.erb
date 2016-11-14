@@ -1,10 +1,34 @@
-<div class='well'>
-  <p>
-    If you have witnessed or experienced any transgressions of this Code of Conduct at <%= @supporter.hack %> please get in contact with:
-  </p>
-  <h3><%= @supporter.name %></h3>
-  <% unless @supporter.phone.blank? %>
-    <h4><%= link_to @supporter.phone, "tel:#{@supporter.phone}" %></h4>
-  <% end %>
-  <h4><%= link_to @supporter.email, "mailto:#{@supporter.email}" %></h4>
+<h2 class='ui dividing header'>Need Help?</h2>
+
+<div class="ui stackable two column grid">
+
+  <div class="column">
+    <div class='ui warning message'>
+      <div class='content'>
+        If you have witnessed or experienced any transgressions of this Code of Conduct at <%= @supporter.hack %> please get in contact with us.
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">
+          <%= @supporter.name %>
+        </div>
+        <span class="meta">
+          <i class="mail outline icon"></i>
+          <%= link_to @supporter.email, "mailto:#{@supporter.email}" %>
+        </span>
+
+      </div>
+      <% unless @supporter.phone.blank? %>
+        <div class="extra content">
+          <i class="phone outline icon"></i>
+          <%= link_to @supporter.phone, "tel:#{@supporter.phone}" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
