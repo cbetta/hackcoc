@@ -7,4 +7,15 @@
   <% else %>
     <a href="/">Hack Code of Conduct</a>
   <% end %>
+
+  <% unless @supporter %>
+    <div class="sub header">
+
+      <a href='/supporters/new?is_custom=true' class="ui labeled icon green button">
+        <i class='configure icon'></i>
+        Make your own
+      </a>
+
+    </div>
+  <% end %>
 </h1>

@@ -7,11 +7,26 @@
 
 <div class='ui info message'>
   <p>
-    This is a generic <a href='/'>Code of Conduct for Hackathons</a><% if @supporter %> customised for <%= @supporter.hack %><% end %>. The people below have all signed this document and/or used a custom version of this document for their event.
+    The <a href='/'>Hack Code of Conduct</a> has been signed but the following people.
   </p>
 </div>
 
-<%= render 'pages/buttons' %>
+<div class="content ui grid coc-buttons">
+  <div class="left aligned eight wide column">
+    <a href='/supporters/new?is_custom=true' class="ui labeled icon green button">
+      <i class='configure icon'></i>
+      Make your own
+    </a>
+
+  </div>
+  <div class="right aligned eight wide column">
+    <a href='/supporters/new' class="ui labeled icon blue button">
+      <i class='plus icon'></i>
+      Show your support
+    </a>
+  </div>
+
+</div>
 
 <br><br>
 

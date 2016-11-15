@@ -1,24 +1,14 @@
-.coc-buttons .left.aligned.column .button {
-  position: relative;
-  z-index: 1000;
-}
-
-@media (max-width: 767px) {
-  .coc-buttons .button {
-    font-size: 0.7em !important;
-  }
+@media (max-width: 500px) {
 
   .coc-buttons .left.aligned.column {
-    float: left !important;
-    width: 30% !important;
+    width: 100% !important;
   }
 
   .coc-buttons .right.aligned.column {
-    float: left !important;
-    width: 70% !important;
+    width: 100% !important;
   }
 
-  .coc-buttons .right.aligned.column .button {
-    margin-bottom: 1em !important;
+  .coc-buttons .button {
+    width: 100% !important;
   }
 }

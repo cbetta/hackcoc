@@ -2,13 +2,9 @@
 <%= render 'pages/flash' if flash[:notice] %>
 <%= render 'pages/title' %>
 <%= render 'pages/acceptance_notice' %>
-
-<%= render 'pages/the_quick_version' %>
-
 <%= render 'supporters/help' if @supporter %>
+<%= render 'pages/the_quick_version' %>
 <%= render 'pages/custom_note' unless @supporter %>
-
 <%= render 'pages/the_less_quick_version' %>
-
 <%= render 'pages/supporters' %>
 <%= render 'pages/credits' %>
