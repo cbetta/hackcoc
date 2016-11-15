@@ -31,7 +31,7 @@
 <br><br>
 
 <div class='ui stackable three cards'>
-  <%= render Supporter.supporting.order(:created_at) %>
+  <%= render Supporter.supporting.by_vip.order(:created_at) %>
 </div>
 
 <br><br>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114233013) do
+ActiveRecord::Schema.define(version: 20161115113746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 20161114233013) do
     t.string   "company",                 limit: 255
     t.string   "access_token"
     t.datetime "access_token_created_on"
+    t.boolean  "maintainer",                          default: false
+    t.boolean  "sponsor",                             default: false
   end
 
 end

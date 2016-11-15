@@ -13,6 +13,7 @@ class Supporter < ActiveRecord::Base
 
   scope :custom, -> { where(is_custom: true) }
   scope :supporting, -> { where(is_supporter: true) }
+  scope :by_vip, -> { order("maintainer DESC, sponsor DESC, id ASC") }
 
   def generate_access_token
     self.access_token = SecureRandom.urlsafe_base64
