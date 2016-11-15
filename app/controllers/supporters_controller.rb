@@ -36,8 +36,13 @@ class SupportersController < ApplicationController
   end
 
   def show
-    @supporter = Supporter.custom.find_by_slug!(params[:path])
-    render 'pages/index'
+    @supporter = Supporter.custom.where(slug: params[:path]).first
+
+    if @supporter
+      render 'pages/index'
+    else
+      redirect_to :root
+    end
   end
 
   def create
