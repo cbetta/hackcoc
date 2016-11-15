@@ -17,7 +17,7 @@ class EmailsController < ApplicationController
     supporter = Supporter.where(email: params[:supporter][:email]).first
     if supporter
       supporter.generate_access_token
-      SupporterMailer.edit_link(supporter).deliver_now
+      SupporterMailer.edit_link(supporter).deliver_later
     end
   end
 end

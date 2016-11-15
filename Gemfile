@@ -20,6 +20,7 @@ gem 'phony_rails'
 gem 'letter_opener', group: :development
 gem 'platform-api', github: 'jalada/platform-api', branch: 'master'
 gem 'letsencrypt-rails-heroku', group: 'production'
+gem 'sucker_punch', '~> 2.0'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-jquery'
