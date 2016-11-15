@@ -18,6 +18,8 @@ gem 'domainatrix'
 gem 'gravatarify'
 gem 'phony_rails'
 gem 'letter_opener', group: :development
+gem 'platform-api', github: 'jalada/platform-api', branch: 'master'
+gem 'letsencrypt-rails-heroku', group: 'production'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-jquery'
