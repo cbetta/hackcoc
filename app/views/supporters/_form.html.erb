@@ -1,4 +1,4 @@
-<%= simple_form_for(@supporter) do |f| %>
+<%= simple_form_for(@supporter, url: @url) do |f| %>
   <div class="ui segment">
     <%= f.input :name, label: "Name", placeholder: 'Joey McJoeyface' %>
     <%= f.input :company, label: "Hackathon or organisation name", placeholder: 'AcmeHack' %>
@@ -26,8 +26,13 @@
   <a href="/" class="ui left floated button">Cancel</a>
 
   <%=button_tag type: 'submit', class: 'ui right floated blue labeled icon button' do %>
-    <i class='checkmark icon'></i>
-    Sign the Code of Conduct
+    <% if @supporter.new_record? %>
+      <i class='checkmark icon'></i>
+      Sign the Code of Conduct
+    <% else %>
+      <i class='pencil icon'></i>
+      Update your profile
+    <% end %>
   <% end %>
   <br><br><br>
 

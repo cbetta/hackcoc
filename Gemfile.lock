@@ -63,6 +63,10 @@ GEM
       activesupport (>= 4.1.0)
     gravatarify (3.1.1)
     i18n (0.7.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
+    letter_opener (1.4.1)
+      launchy (~> 2.2)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.4)
@@ -162,6 +166,7 @@ DEPENDENCIES
   email_validator
   foreman
   gravatarify
+  letter_opener
   pg
   phony_rails
   rails (= 5.0.0.1)

@@ -22,7 +22,10 @@
 
   <div class="extra content">
     <i class='ui icon linkify'></i>
-    <%= link_if supporter.hack, supporter.url %>
-
+    <% if supporter.is_custom %>
+      <%= link_if supporter.hack, supporter.url %>
+    <% else %>
+    <%= link_if supporter.company, supporter.url %>
+    <% end %>
   </div>
 </div>

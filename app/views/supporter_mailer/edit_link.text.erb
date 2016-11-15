@@ -1,0 +1,11 @@
+Hi <%= @supporter.name %>,
+
+You have received this email because a edit link request for your account was received.
+
+Click the button below to edit your profile:
+<%= edit_supporter_url(id: @supporter.access_token) %>
+
+If you did not request an edit link, no further action is required on your part.
+
+Yours truly,
+Cristiano Betta

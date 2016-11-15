@@ -17,6 +17,7 @@ gem 'validate_url'
 gem 'domainatrix'
 gem 'gravatarify'
 gem 'phony_rails'
+gem 'letter_opener', group: :development
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-jquery'

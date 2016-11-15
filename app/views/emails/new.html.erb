@@ -1,0 +1,25 @@
+<h2 class='ui dividing header'>Support or Customize</h2>
+
+<div class='ui message'>
+  <p>
+    This page is for people who have already supported the Hack Code of Conduct, or added a custom version and want to edit it.
+  </p>
+  <p>
+    Fill in your email below and we will send you a unique link to edit your existing entry.
+  </p>
+</div>
+
+<%= simple_form_for(Supporter.new, url: '/email') do |f| %>
+  <div class="ui segment">
+    <%= f.input :email %>
+  </div>
+
+  <br>
+
+  <%=button_tag type: 'submit', class: 'ui right floated blue labeled icon button' do %>
+    <i class='mail icon'></i>
+    Request a link to edit
+  <% end %>
+
+  <br><br>
+<% end %>

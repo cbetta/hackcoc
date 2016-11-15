@@ -1,0 +1,10 @@
+<h1>
+  <% if @supporter %>
+    <%= link_to request.original_url  do %>
+    <%= @supporter.hack %><br>
+     Code of Conduct
+    <% end %>
+  <% else %>
+    <a href="/">Hack Code of Conduct</a>
+  <% end %>
+</h1>

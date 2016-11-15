@@ -1,0 +1,22 @@
+<h2 class='ui dividing header' id='supporters'>
+  Supporters
+  <div class="sub header">
+    <%= Supporter.supporting.count %> and counting
+  </div>
+</h2>
+
+<div class='ui info message'>
+  <p>
+    This is a generic <a href='/'>Code of Conduct for Hackathons</a><% if @supporter %> customised for <%= @supporter.hack %><% end %>. The people below have all signed this document and/or used a custom version of this document for their event.
+  </p>
+</div>
+
+<%= render 'pages/buttons' %>
+
+<br><br>
+
+<div class='ui stackable three cards'>
+  <%= render Supporter.supporting.order(:created_at) %>
+</div>
+
+<br><br>
