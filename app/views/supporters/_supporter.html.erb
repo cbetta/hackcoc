@@ -2,7 +2,7 @@
   <div class="ui image">
     <%= image_tag(
           image_url('user.png'), class: 'lazy', data: {
-            src:  gravatar_url(supporter.email, size: 200, default: image_url('user.png'))
+            src:  gravatar_url(supporter.email, size: 200, default: image_url('user.png'), secure: true)
           }
         ) %>
   </div>
