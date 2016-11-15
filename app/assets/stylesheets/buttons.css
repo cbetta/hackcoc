@@ -1,3 +1,8 @@
+.coc-buttons .left.aligned.column .button {
+  position: relative;
+  z-index: 1000;
+}
+
 @media (max-width: 767px) {
   .coc-buttons .button {
     font-size: 0.7em !important;
