@@ -1,7 +1,7 @@
 class Supporter < ActiveRecord::Base
   validates :name, presence: true
   validates :url, presence: true, url: true
-  validates :email, presence: true, email: true
+  validates :email, presence: true, email: true, uniqueness: true
   validates :title, presence: true
   validates :company, presence: true
   validates :url, presence: true, if: :is_custom
@@ -19,7 +19,7 @@ class Supporter < ActiveRecord::Base
     self.access_token_created_on = Time.now
     self.save!
   end
-  
+
   private
 
   def generate_slug

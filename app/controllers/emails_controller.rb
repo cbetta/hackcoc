@@ -14,7 +14,7 @@ class EmailsController < ApplicationController
   private
 
   def email_supporter
-    supporter = Supporter.where(email: params[:supporter][:email]).first
+    supporter = Supporter.where(email: params[:supporter][:email]).order(:created).first
     if supporter
       supporter.generate_access_token
       SupporterMailer.edit_link(supporter).deliver_later
