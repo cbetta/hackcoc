@@ -7,15 +7,19 @@
   <% else %>
     <a href="/">Hack Code of Conduct</a>
   <% end %>
+</h1>
 
-  <% unless @supporter %>
+<% unless @supporter %>
+  <div class="ui centered grid">
     <div class="sub header">
 
       <a href='/supporters/new?is_custom=true' class="ui labeled icon green button">
-        <i class='configure icon'></i>
+        <i aria-hidden="true" class='configure icon'></i>
         Make your own
       </a>
 
     </div>
-  <% end %>
-</h1>
+  </div>
+<% end %>
+
+<br><br>

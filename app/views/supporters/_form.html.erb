@@ -27,10 +27,10 @@
 
   <%=button_tag type: 'submit', class: 'ui right floated blue labeled icon button' do %>
     <% if @supporter.new_record? %>
-      <i class='checkmark icon'></i>
+      <i aria-hidden="true" class='checkmark icon'></i>
       Sign the Code of Conduct
     <% else %>
-      <i class='pencil icon'></i>
+      <i aria-hidden="true" class='pencil icon'></i>
       Update your profile
     <% end %>
   <% end %>

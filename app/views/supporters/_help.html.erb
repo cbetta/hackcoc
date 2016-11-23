@@ -18,14 +18,14 @@
           <%= @supporter.name %>
         </div>
         <span class="meta">
-          <i class="mail outline icon"></i>
+          <i aria-hidden="true" class="mail outline icon"></i>
           <%= link_to @supporter.email, "mailto:#{@supporter.email}" %>
         </span>
 
       </div>
       <% unless @supporter.phone.blank? %>
         <div class="extra content">
-          <i class="phone outline icon"></i>
+          <i aria-hidden="true" class="phone outline icon"></i>
           <%= link_to @supporter.phone, "tel:#{@supporter.phone}" %>
         </div>
       <% end %>
