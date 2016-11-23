@@ -1,10 +1,10 @@
 <%= simple_form_for(@supporter, url: @url, html: { role: 'form' }) do |f| %>
   <div class="ui segment">
-    <%= f.input :name, label: "Name", placeholder: 'Joey McJoeyface', required: true %>
-    <%= f.input :company, label: "Hackathon or organisation name", placeholder: 'AcmeHack', required: true %>
-    <%= f.input :title, label: "Role", placeholder: 'Organiser', required: true %>
-    <%= f.input :url, label: "Hackathon/organisation URL", placeholder: 'http://', required: true %>
-    <%= f.input :email, label: "Email", placeholder: "Not published", required: true %>
+    <%= f.input :name, { label: "Name", placeholder: 'Joey McJoeyface', required: true, error_html: { id: 'name_error' }, input_html: { "aria-describedby" => 'name_error' } }.reject{ |k,v| ( k == :error_html || k == :input_html ) && @supporter.errors[:name].nil? } %>
+    <%= f.input :company, { label: "Hackathon or organisation name", placeholder: 'AcmeHack', required: true, error_html: { id: 'company_error' }, input_html: { "aria-describedby" => 'company_error' } }.reject{ |k,v| ( k == :error_html || k == :input_html ) && @supporter.errors[:company].nil? } %>
+    <%= f.input :title, { label: "Role", placeholder: 'Organiser', required: true , error_html: { id: 'title_error' }, input_html: { "aria-describedby" => 'title_error' } }.reject{ |k,v| ( k == :error_html || k == :input_html ) && @supporter.errors[:title].nil? }%>
+    <%= f.input :url, { label: "Hackathon/organisation URL", placeholder: 'http://', required: true, error_html: { id: 'url_error' }, input_html: { "aria-describedby" => 'url_error' } }.reject{ |k,v| ( k == :error_html || k == :input_html ) && @supporter.errors[:url].nil? } %>
+    <%= f.input :email, { label: "Email", placeholder: "Not published", required: true, error_html: { id: 'email_error' }, input_html: { "aria-describedby" => 'email_error' } }.reject{ |k,v| ( k == :error_html || k == :input_html ) && @supporter.errors[:email].nil? } %>
     <%= f.input :is_custom, wrapper: :ui_slider_checkbox, label: "Create a custom Code of Conduct? &nbsp;".html_safe %>
   </div>
 
@@ -14,8 +14,8 @@
     </div>
 
     <div class="ui segment">
-      <%= f.input :hack, label: "Hackathon name", placeholder: "AcmeHack #{DateTime.now.year}", required: false %>
-      <%= f.input :phone, label: "Phone number", placeholder: '+1 444 5556 667', required: false %>
+      <%= f.input :hack, { label: "Hackathon name", placeholder: "AcmeHack #{DateTime.now.year}", required: true, error_html: { id: 'hack_error' }, input_html: { "aria-describedby" => 'hack_error' } }.reject{ |k,v| ( k == :error_html || k == :input_html ) && @supporter.errors[:hack].nil? } %>
+      <%= f.input :phone, { label: "Phone number", placeholder: '+1 444 5556 667', required: true, error_html: { id: 'phone_error' }, input_html: { "aria-describedby" => 'phone_error' } }.reject{ |k,v| ( k == :error_html || k == :input_html ) && @supporter.errors[:phone].nil? } %>
       <%= f.input :is_supporter, wrapper: :ui_toggle_checkbox, label: "Also publish your name at the bottom of this page? &nbsp;".html_safe, required: false %>
     </div>
 

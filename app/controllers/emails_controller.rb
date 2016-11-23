@@ -4,11 +4,18 @@ class EmailsController < ApplicationController
   end
 
   def new
+    @supporter = Supporter.new
   end
 
   def create
-    email_supporter
-    redirect_to :root, notice: "We have sent an link to the email address you provided. This link is only valid for 30 minutes."
+    if params[:supporter][:email].blank?
+      @supporter = Supporter.new
+      @supporter.save
+      render :new
+    else
+      email_supporter
+      redirect_to :root, notice: "We have sent an link to the email address you provided. This link is only valid for 30 minutes."
+    end
   end
 
   private

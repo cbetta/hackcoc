@@ -28,7 +28,7 @@ class SupportersController < ApplicationController
       if @supporter.is_custom
         redirect_to "/#{@supporter.slug}", notice: 'Profile updated'
       else
-        redirect_to root_url, notice: 'Profile updated'
+        redirect_to root_url, notice: 'Your profile has been updated'
       end
     else
       render :edit
@@ -49,9 +49,9 @@ class SupportersController < ApplicationController
     @supporter = Supporter.new(permitted_params)
     if @supporter.save
       if @supporter.is_custom
-        redirect_to "/#{@supporter.slug}"
+        redirect_to "/#{@supporter.slug}", notice: 'Your custom code of conduct has been created.'
       else
-        redirect_to root_url(anchor: "supporters")
+        redirect_to root_url, notice: 'Your have been added to the supporters list.'
       end
     else
       render :new
