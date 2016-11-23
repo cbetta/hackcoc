@@ -6,7 +6,7 @@ class Supporter < ActiveRecord::Base
   validates :company, presence: true
   validates :url, presence: true, if: :is_custom
   validates :hack, presence: true, if: :is_custom
-  validates :phone, presence: true, phony_plausible: true, if: :is_custom
+  validates :phone, presence: true, phony_plausible: { message: 'is not in international format (e.g. +1 444 555 6666)' }, if: :is_custom
   validates :slug, uniqueness: true, if: :is_custom
 
   after_create :generate_slug
