@@ -1,4 +1,5 @@
-a:focus, .ui.button:focus {
+a:focus,
+.ui.button:focus {
   outline-style: auto	!important;
   outline-width: 5px !important;
   outline-color: auto !important;
@@ -6,6 +7,14 @@ a:focus, .ui.button:focus {
 
 .ui.button:focus {
   outline-color: rgb(59, 153, 252) !important;
+}
+
+.toggle.checkbox input:focus + label:after,
+.slider.checkbox input:focus + label:after {
+  border: 5px solid rgb(59, 153, 252) !important;
+  box-sizing: content-box;
+  margin-top: -5px;
+  margin-left: -5px !important;
 }
 
 p a,
@@ -23,4 +32,8 @@ p a,
   width: 1px;
   padding: 0;
   border: 0
+}
+
+.underlined {
+  text-decoration: underline;
 }

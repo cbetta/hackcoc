@@ -1,10 +1,10 @@
-<%= simple_form_for(@supporter, url: @url) do |f| %>
+<%= simple_form_for(@supporter, url: @url, html: { role: 'form' }) do |f| %>
   <div class="ui segment">
-    <%= f.input :name, label: "Name", placeholder: 'Joey McJoeyface' %>
-    <%= f.input :company, label: "Hackathon or organisation name", placeholder: 'AcmeHack' %>
-    <%= f.input :title, label: "Role", placeholder: 'Organiser' %>
-    <%= f.input :url, label: "Hackathon/organisation URL", placeholder: 'http://' %>
-    <%= f.input :email, label: "Email", placeholder: "Not published" %>
+    <%= f.input :name, label: "Name", placeholder: 'Joey McJoeyface', required: true %>
+    <%= f.input :company, label: "Hackathon or organisation name", placeholder: 'AcmeHack', required: true %>
+    <%= f.input :title, label: "Role", placeholder: 'Organiser', required: true %>
+    <%= f.input :url, label: "Hackathon/organisation URL", placeholder: 'http://', required: true %>
+    <%= f.input :email, label: "Email", placeholder: "Not published", required: true %>
     <%= f.input :is_custom, wrapper: :ui_slider_checkbox, label: "Create a custom Code of Conduct? &nbsp;".html_safe %>
   </div>
 
@@ -14,9 +14,9 @@
     </div>
 
     <div class="ui segment">
-      <%= f.input :hack, label: "Hackathon name", placeholder: "AcmeHack #{DateTime.now.year}" %>
-      <%= f.input :phone, label: "Phone number", placeholder: '+1 444 5556 667' %>
-      <%= f.input :is_supporter, wrapper: :ui_toggle_checkbox, label: "Also publish your name at the bottom of this page? &nbsp;".html_safe %>
+      <%= f.input :hack, label: "Hackathon name", placeholder: "AcmeHack #{DateTime.now.year}", required: false %>
+      <%= f.input :phone, label: "Phone number", placeholder: '+1 444 5556 667', required: false %>
+      <%= f.input :is_supporter, wrapper: :ui_toggle_checkbox, label: "Also publish your name at the bottom of this page? &nbsp;".html_safe, required: false %>
     </div>
 
   </div>

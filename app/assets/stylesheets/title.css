@@ -6,6 +6,7 @@ h1 {
   text-align: center;
 }
 
+h1.padded,
 h2 {
   padding-top: 2em !important;
 }
