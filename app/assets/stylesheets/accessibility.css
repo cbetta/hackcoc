@@ -37,3 +37,10 @@ p a,
 .underlined {
   text-decoration: underline;
 }
+
+
+div.ribbon {
+	position: absolute;
+	top: 14px;
+  right: 15px;
+}

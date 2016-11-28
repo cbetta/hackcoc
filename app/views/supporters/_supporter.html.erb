@@ -1,10 +1,6 @@
 <div id='supporter-<%= supporter.id %>' class='ui card supporter'>
   <div class="ui image">
-    <% if supporter.maintainer %>
-      <span class="ui orange right ribbon label">Maintainer</span>
-    <% elsif supporter.sponsor %>
-      <span class="ui blue right ribbon label">Sponsor</span>
-    <% end %>
+
     <%= image_tag(
           image_url('user.png'), class: 'lazy', alt: '', data: {
             src:  gravatar_url(supporter.email, size: 200, default: image_url('user.png'), secure: true)
@@ -13,18 +9,28 @@
   </div>
 
   <div class="content user-info">
-    <div class="ui header">
+    <h3 class="ui header">
       <% if supporter.is_custom %>
         <%= link_to supporter.name, "/#{supporter.slug}" %>
       <% else %>
         <%= supporter.name %>
       <% end %>
-    </div>
+    </h3>
     <div class="description">
       <%= supporter.title %>
       <%= "@ #{supporter.company}" unless supporter.company.blank? %>
     </div>
   </div>
+
+  <% if supporter.maintainer %>
+    <div class="ribbon">
+      <span class="ui orange right ribbon label">Maintainer</span>
+    </div>
+  <% elsif supporter.sponsor %>
+    <div class="ribbon">
+      <span class="ui blue right ribbon label">Sponsor</span>
+    </div>
+  <% end %>
 
   <div class="extra content">
     <i aria-hidden="true" class='ui icon linkify'></i>
