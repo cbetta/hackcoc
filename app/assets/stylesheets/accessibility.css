@@ -44,3 +44,16 @@ div.ribbon {
 	top: 14px;
   right: 15px;
 }
+
+.float-right {
+  float: right;
+}
+
+.speech-button {
+  border-radius: 8px;
+  background-color: Transparent;
+  outline: none;
+  border-style:none;
+  font-size: 12pt;
+  padding: 0px 10px;
+}
