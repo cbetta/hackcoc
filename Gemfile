@@ -21,7 +21,7 @@ gem 'sucker_punch', '~> 2.0'
 
 
 group :development do
-  gem 'rails_real_favicon'
+  gem 'rails_real_favicon', '>= 0.0.6'
   gem 'letter_opener'
   gem 'foreman'
   gem 'spring'
