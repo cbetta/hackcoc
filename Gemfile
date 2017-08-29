@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-ruby '2.3.1'
+ruby '2.4.1'
 
-gem 'rails', '5.0.0.1'
+gem 'rails'
 gem 'pg'
 gem 'uglifier'
 gem 'rails_12factor'
@@ -15,8 +15,6 @@ gem 'validate_url'
 gem 'domainatrix'
 gem 'gravatarify'
 gem 'phony_rails'
-gem 'platform-api', github: 'jalada/platform-api', branch: 'master'
-gem 'letsencrypt-rails-heroku', group: 'production'
 gem 'sucker_punch', '~> 2.0'
 
 
