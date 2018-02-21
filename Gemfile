@@ -1,25 +1,25 @@
 source 'https://rubygems.org'
 
-ruby '2.4.2'
+ruby '2.5.0'
 
-gem 'rails', '>= 5.1.3'
+gem 'rails', '>= 5.2.0.rc1'
 gem 'pg'
 gem 'uglifier'
 gem 'rails_12factor'
 gem 'turbolinks'
-gem 'coffee-rails', '>= 4.2.2'
-gem 'sass-rails', '>= 5.0.6'
-gem 'simple_form', '>= 3.5.0'
+gem 'coffee-rails'
+gem 'sass-rails'
+gem 'simple_form'
 gem 'email_validator'
 gem 'validate_url'
 gem 'domainatrix'
 gem 'gravatarify'
 gem 'phony_rails'
-gem 'sucker_punch', '~> 2.0'
+gem 'sucker_punch'
 
 
 group :development do
-  gem 'rails_real_favicon', '>= 0.0.7'
+  gem 'rails_real_favicon'
   gem 'letter_opener'
   gem 'foreman'
   gem 'spring'
