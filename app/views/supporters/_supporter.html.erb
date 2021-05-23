@@ -10,11 +10,7 @@
 
   <div class="content user-info">
     <h3 class="ui header">
-      <% if supporter.is_custom %>
-        <%= link_to supporter.name, "/#{supporter.slug}" %>
-      <% else %>
-        <%= supporter.name %>
-      <% end %>
+      <%= supporter.name %>
     </h3>
     <div class="description">
       <%= supporter.title %>
@@ -33,11 +29,6 @@
   <% end %>
 
   <div class="extra content">
-    <i aria-hidden="true" class='ui icon linkify'></i>
-    <% if supporter.is_custom %>
-      <%= link_if supporter.hack, supporter.url %>
-    <% else %>
-    <%= link_if supporter.company, supporter.url %>
-    <% end %>
+      <%= supporter.company %>
   </div>
 </div>
