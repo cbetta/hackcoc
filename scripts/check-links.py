@@ -21,7 +21,7 @@ args = argparse.ArgumentParser()
 args.add_argument("site")
 args.add_argument("--known")
 args.add_argument("hosts", nargs="*")
-args = args.parse_args()
+args = args.parse_intermixed_args()
 
 root = os.path.abspath(args.site)
 own = set(args.hosts)
