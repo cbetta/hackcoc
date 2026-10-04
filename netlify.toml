@@ -1,0 +1,5 @@
+# The site now runs on jiji (see README). Netlify keeps serving its last
+# deploy until the DNS moves, and builds nothing new: delete this file along
+# with the Netlify site.
+[build]
+  ignore = "exit 0"

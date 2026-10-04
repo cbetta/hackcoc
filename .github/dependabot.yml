@@ -1,0 +1,18 @@
+# deps-factory (cbetta/deps-factory) owns version updates; the site has no
+# packages, so Dependabot only refreshes the nginx base image's digest and
+# the Actions pins, monthly.
+version: 2
+updates:
+  - package-ecosystem: docker
+    directory: "/"
+    schedule: { interval: monthly }
+    groups: { base-images: { patterns: ["*"] } }
+    # Fresh digests of the same nginx only. The next stable nginx is a
+    # deliberate upgrade, by hand.
+    ignore:
+      - dependency-name: "nginxinc/nginx-unprivileged"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule: { interval: monthly }
+    groups: { actions: { patterns: ["*"] } }

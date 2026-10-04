@@ -1,0 +1,105 @@
+name: CI
+
+# Every PR, and the gate publish.yml runs before building an image for jiji.
+# scripts/check.sh and scripts/smoke.sh are what deps-factory runs too, so
+# "green" means the same thing here, there and locally.
+
+on:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: scripts/check.sh
+
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: scripts/smoke.sh
+
+  ci-complete:
+    needs: [checks, smoke]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "All checks passed."
+
+  # Merges deps-factory PRs labelled "automerge", and Dependabot patch/minor
+  # updates, once every check has passed. The deps-factory App's token makes the
+  # merge trigger publishing (a GITHUB_TOKEN merge would not). Actions updates
+  # always wait for a person. Does nothing until the App's secrets exist.
+  merge:
+    needs: ci-complete
+    if: >-
+      github.event_name == 'pull_request' &&
+      (startsWith(github.head_ref, 'deps-factory/') ||
+       github.event.pull_request.user.login == 'dependabot[bot]')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    env:
+      HAS_APP: ${{ secrets.FACTORY_APP_ID != '' }}
+    steps:
+      - name: Read the Dependabot update
+        id: meta
+        if: github.event.pull_request.user.login == 'dependabot[bot]'
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      - name: Decide
+        id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          FROM_DEPENDABOT: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
+          UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
+          ECOSYSTEM: ${{ steps.meta.outputs.package-ecosystem }}
+          NEW_VERSION: ${{ steps.meta.outputs.new-version }}
+        run: |
+          merge=false
+          if [ "$HAS_APP" != true ]; then
+            reason="the deps-factory App's secrets aren't set yet"
+          elif [ "$FROM_DEPENDABOT" = true ]; then
+            case "$ECOSYSTEM:$UPDATE_TYPE" in
+              github_actions:*) reason="Actions updates wait for a person" ;;
+              *:version-update:semver-patch) merge=true ;;
+              *:version-update:semver-minor)
+                if [ "${NEW_VERSION%%.*}" = 0 ]; then reason="a 0.x minor can break"; else merge=true; fi ;;
+              docker:|docker_compose:) merge=true ;;  # digest-only refresh of the same tag
+              *) reason="${UPDATE_TYPE:-an unclassified update} waits for a person" ;;
+            esac
+          else
+            pr="$(gh pr view "$PR" -R "$GITHUB_REPOSITORY" --json isDraft,labels)"
+            if jq -e '.isDraft' <<< "$pr" > /dev/null; then reason="it's a draft"
+            elif jq -e 'any(.labels[]; .name == "automerge")' <<< "$pr" > /dev/null; then merge=true
+            else reason="it isn't labelled automerge"; fi
+          fi
+          echo "merge=$merge" >> "$GITHUB_OUTPUT"
+          if [ "$merge" = true ]; then echo "Merging."; else echo "Not merging: $reason."; fi
+
+      - name: Get the App's token
+        id: app
+        if: steps.decide.outputs.merge == 'true'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.FACTORY_APP_ID }}
+          private-key: ${{ secrets.FACTORY_APP_KEY }}
+
+      - name: Merge
+        if: steps.decide.outputs.merge == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: gh pr merge "$PR" -R "$GITHUB_REPOSITORY" --squash --delete-branch --match-head-commit "$HEAD"

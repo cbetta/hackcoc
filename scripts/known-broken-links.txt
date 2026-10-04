@@ -1,0 +1,7 @@
+# Already broken on Netlify when the site moved to jiji (October 2026): the
+# favicons were never committed. scripts/check-links.py reports these as a
+# count, and fails on anything else.
+/assets/favicon/apple-touch-icon-7ab706b93c2bed725c88587f927fdae6e71a1abd9c5b8bbea97581c61cfcc5f2.png
+/assets/favicon/favicon-16x16-5d60dae979ab4a4b1a2270fc055fe280adad5e751c29c74091075f65a0cd161d.png
+/assets/favicon/favicon-32x32-ae16bd2e6f21beb18a2b0bea97545107144746291ac721b9a58dc2f740bfea75.png
+/assets/favicon/safari-pinned-tab-e1518c6cc56694a0a944218b1b2d8a6417e21dcad03cf64913a0217fb5e3f771.svg
