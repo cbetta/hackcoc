@@ -1,7 +1,0 @@
-# The site now runs on jiji (see README). Netlify keeps serving its last
-# deploy until the DNS moves, and builds nothing new: the ignore command
-# cancels every build, and if one ever ran anyway, the build command fails
-# it before anything is published. Delete this file with the Netlify site.
-[build]
-  ignore = "exit 0"
-  command = "echo 'Served from jiji now, not Netlify.' && exit 1"
