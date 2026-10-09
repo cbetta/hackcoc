@@ -1,6 +1,6 @@
 # The site is plain files, served by nginx with Netlify's URL rules
 # (nginx.conf). It runs on jiji, behind Caddy and the Cloudflare tunnel.
-FROM nginxinc/nginx-unprivileged:1.30-alpine@sha256:ed04ec1ff34502c339ee5c3ae3f855442398edc1d05591e2b98981dcbbd20b1e
+FROM mirror.gcr.io/nginxinc/nginx-unprivileged:1.30-alpine@sha256:ed04ec1ff34502c339ee5c3ae3f855442398edc1d05591e2b98981dcbbd20b1e
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --link index.html robots.txt /srv/site/

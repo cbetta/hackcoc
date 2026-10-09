@@ -10,7 +10,7 @@ updates:
     # Fresh digests of the same nginx only. The next stable nginx is a
     # deliberate upgrade, by hand.
     ignore:
-      - dependency-name: "nginxinc/nginx-unprivileged"
+      - dependency-name: "*nginxinc/nginx-unprivileged"
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
   - package-ecosystem: github-actions
     directory: "/"
