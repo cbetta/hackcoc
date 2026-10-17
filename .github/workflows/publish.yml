@@ -45,7 +45,7 @@ jobs:
 
   publish:
     needs: ci
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, jiji-ci]
     permissions:
       contents: read
       packages: write
