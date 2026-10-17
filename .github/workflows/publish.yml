@@ -52,6 +52,11 @@ jobs:
     outputs:
       ref: ${{ steps.ref.outputs.ref }}
     steps:
+      # Its own Docker config: the jiji-ci runners share one HOME, so a shared
+      # config.json would hand another repo's publish this job's GHCR login,
+      # and its logout.
+      - run: echo "DOCKER_CONFIG=$RUNNER_TEMP/docker" >> "$GITHUB_ENV"
+
       # History without old file contents: the timestamp below needs the log.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
