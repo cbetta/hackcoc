@@ -1,13 +1,13 @@
 name: Publish to jiji
 
 # Push to master -> CI (ci.yml) -> build the image and push it to
-# ghcr.io/cbetta/hackcoc -> cbetta/jiji's pin.yml pins it by tag and digest
-# within 10 minutes, which deploys it. jiji holds no copy of the site, only
+# ghcr.io/cbetta/hackcoc -> jiji's pin timer pins it by tag and digest within
+# about a minute, which deploys it. jiji holds no copy of the site, only
 # which image it runs, so master here is always what hackcodeofconduct.org
 # serves.
 #
 # Nothing here can write to cbetta/jiji: publish runs on jiji's walled-off CI
-# runners, so the deploy key stays with jiji's own pin.yml, which finds the
+# runners, so the deploy key stays with jiji's own pin timer, which finds the
 # new image through the moving :master tag and the io.betta.jiji.tag label.
 # Actions are pinned by commit (their version in the comment).
 
