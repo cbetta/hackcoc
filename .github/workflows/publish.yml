@@ -1,15 +1,15 @@
 name: Publish to jiji
 
 # Push to master -> CI (ci.yml) -> build the image and push it to
-# ghcr.io/cbetta/hackcoc -> pin that image in cbetta/jiji's docker-compose.yml,
-# which triggers jiji's own deploy. jiji holds no copy of the site, only which
-# image it runs, so master here is always what hackcodeofconduct.org serves.
+# ghcr.io/cbetta/hackcoc -> cbetta/jiji's pin.yml pins it by tag and digest
+# within 10 minutes, which deploys it. jiji holds no copy of the site, only
+# which image it runs, so master here is always what hackcodeofconduct.org
+# serves.
 #
-# Three jobs, so the jiji deploy key (a push to jiji deploys to the home
-# server) never shares a machine with anything else: the build runs inside
-# BuildKit with no secrets, and the pin job only checks out jiji and edits
-# one line. jiji pins the image by digest as well as tag. Actions are pinned
-# by commit (their version in the comment).
+# Nothing here can write to cbetta/jiji: publish runs on jiji's walled-off CI
+# runners, so the deploy key stays with jiji's own pin.yml, which finds the
+# new image through the moving :master tag and the io.betta.jiji.tag label.
+# Actions are pinned by commit (their version in the comment).
 
 on:
   push:
@@ -25,7 +25,7 @@ on:
       - ".github/workflows/publish.yml"
   workflow_dispatch:
 
-# Serialised: two pushes in quick succession must not race to pin jiji.
+# Serialised: two pushes in quick succession must not race to move the tags.
 concurrency:
   group: publish
   cancel-in-progress: false
@@ -49,8 +49,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    outputs:
-      ref: ${{ steps.ref.outputs.ref }}
     steps:
       # Its own Docker config: the jiji-ci runners share one HOME, so a shared
       # config.json would hand another repo's publish this job's GHCR login,
@@ -98,49 +96,6 @@ jobs:
           tags: |
             ghcr.io/cbetta/hackcoc:${{ steps.meta.outputs.tag }}
             ghcr.io/cbetta/hackcoc:master
-          labels: org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-
-      - name: Image reference
-        id: ref
-        env:
-          TAG: ${{ steps.meta.outputs.tag }}
-          DIGEST: ${{ steps.build.outputs.digest }}
-        run: |
-          [[ "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]] || { echo "::error::no digest for the image"; exit 1; }
-          echo "ref=$TAG@$DIGEST" >> "$GITHUB_OUTPUT"
-
-  pin:
-    needs: publish
-    runs-on: ubuntu-latest
-    # The jiji-deploy environment only runs for master, and holds the key: no
-    # other branch (or dispatch from one), and no pull request, can get it.
-    environment: jiji-deploy
-    steps:
-      # JIJI_DEPLOY_KEY: a deploy key on cbetta/jiji with write access, a
-      # secret of the jiji-deploy environment.
-      - name: Check out jiji
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: cbetta/jiji
-          ssh-key: ${{ secrets.JIJI_DEPLOY_KEY }}
-          path: jiji
-
-      - name: Pin the image in jiji
-        env:
-          REF: ${{ needs.publish.outputs.ref }}
-          SOURCE: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
-        run: |
-          set -euo pipefail
-          [[ "$REF" =~ ^sha-[0-9a-f]{7}@sha256:[0-9a-f]{64}$ ]] || { echo "::error::unexpected image reference $REF"; exit 1; }
-          cd jiji
-          sed -i -E "s#^(\s+image: ghcr\.io/cbetta/hackcoc):.*#\1:${REF}#" docker-compose.yml
-          grep -qF "image: ghcr.io/cbetta/hackcoc:${REF}" docker-compose.yml \
-            || { echo "::error::jiji's docker-compose.yml has no 'image: ghcr.io/cbetta/hackcoc:…' line to pin"; exit 1; }
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docker-compose.yml
-          if git diff --cached --quiet; then echo "jiji already runs ${REF%@*}."; exit 0; fi
-          git commit -m "hackcoc: deploy ${REF%@*}" -m "Automated by cbetta/hackcoc .github/workflows/publish.yml. Source: ${SOURCE}"
-          # jiji's main may have moved since the checkout.
-          for i in 1 2 3; do git push origin HEAD:main && exit 0; git pull --rebase origin main; done
-          exit 1
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            io.betta.jiji.tag=${{ steps.meta.outputs.tag }}
