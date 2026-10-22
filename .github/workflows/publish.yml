@@ -1,7 +1,7 @@
 name: Publish to jiji
 
 # Push to master -> CI (ci.yml) -> build the image and push it to
-# ghcr.io/cbetta/hackcoc -> jiji's pin timer pins it by tag and digest within
+# ghcr.io/betta-apps/hackcoc -> jiji's pin timer pins it by tag and digest within
 # about a minute, which deploys it. jiji holds no copy of the site, only
 # which image it runs, so master here is always what hackcodeofconduct.org
 # serves.
@@ -94,8 +94,8 @@ jobs:
           context: .
           outputs: type=registry,rewrite-timestamp=true
           tags: |
-            ghcr.io/cbetta/hackcoc:${{ steps.meta.outputs.tag }}
-            ghcr.io/cbetta/hackcoc:master
+            ghcr.io/betta-apps/hackcoc:${{ steps.meta.outputs.tag }}
+            ghcr.io/betta-apps/hackcoc:master
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             io.betta.jiji.tag=${{ steps.meta.outputs.tag }}

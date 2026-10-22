@@ -1,4 +1,4 @@
-# deps-factory (cbetta/deps-factory) owns version updates; the site has no
+# deps-factory (betta-apps/deps-factory) owns version updates; the site has no
 # packages, so Dependabot only refreshes the nginx base image's digest and
 # the Actions pins, monthly.
 version: 2
