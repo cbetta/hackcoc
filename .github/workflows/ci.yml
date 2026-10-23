@@ -70,6 +70,7 @@ jobs:
           UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
           ECOSYSTEM: ${{ steps.meta.outputs.package-ecosystem }}
           NEW_VERSION: ${{ steps.meta.outputs.new-version }}
+          PREVIOUS_VERSION: ${{ steps.meta.outputs.previous-version }}
         run: |
           merge=false
           if [ "$HAS_APP" != true ]; then
@@ -77,10 +78,12 @@ jobs:
           elif [ "$FROM_DEPENDABOT" = true ]; then
             case "$ECOSYSTEM:$UPDATE_TYPE" in
               github_actions:*) reason="Actions updates wait for a person" ;;
+              # Same tag, new digest: Dependabot names the old digest as the previous version (a new tag names the old tag).
+              docker:*|docker_compose:*)
+                if [[ "$(tr -d "\`" <<< "$PREVIOUS_VERSION")" =~ ^[0-9a-f]{7,}$ ]]; then merge=true; else reason="a new image tag waits for a person"; fi ;;
               *:version-update:semver-patch) merge=true ;;
               *:version-update:semver-minor)
                 if [ "${NEW_VERSION%%.*}" = 0 ]; then reason="a 0.x minor can break"; else merge=true; fi ;;
-              docker:|docker_compose:) merge=true ;;  # digest-only refresh of the same tag
               *) reason="${UPDATE_TYPE:-an unclassified update} waits for a person" ;;
             esac
           else
