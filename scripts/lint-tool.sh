@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Runs a pinned shellcheck, actionlint, ruff or oxlint, so the checks behave
 # the same on a laptop, on the CI runners and in deps-factory, none of which
-# need it installed. Each is downloaded once into the cache and checked
-# against its SHA-256 before it runs.
+# need it installed. Each archive is downloaded once into the cache; every
+# run copies it out, checks its SHA-256 and unpacks it afresh, so nothing in
+# the cache is trusted.
 #   scripts/lint-tool.sh <shellcheck|actionlint|ruff|oxlint> [args...]
 set -euo pipefail
 
@@ -13,9 +14,18 @@ case "$(uname -s)/$(uname -m)" in
   Darwin/arm64) platform=darwin-arm64 ;;
   *) echo "lint-tool: no pinned build for $(uname -s)/$(uname -m)" >&2; exit 1 ;;
 esac
-cache="${XDG_CACHE_HOME:-$HOME/.cache}/lint-tools"
+# In Actions, the job's own temp folder: the jiji-ci runners share HOME
+# between repos.
+cache="${RUNNER_TEMP:-${XDG_CACHE_HOME:-$HOME/.cache}}/lint-tools"
+work="$(mktemp -d)"
+trap 'rm -rf "$work"' EXIT
 
-# Sets $bin to the tool's path, downloading it first if it isn't cached.
+sha256() {
+  if command -v sha256sum >/dev/null; then sha256sum "$1" | cut -d' ' -f1; else shasum -a 256 "$1" | cut -d' ' -f1; fi
+}
+
+# Sets $bin to the tool, unpacked into $work from an archive checked against
+# its SHA-256, downloading the archive first if the cache doesn't have it.
 ensure() {
   local tool=$1 version url sha member asset
   case "$tool/$platform" in
@@ -56,27 +66,20 @@ ensure() {
       member="oxlint-$asset" ;;
   esac
 
-  bin="$cache/$tool-$version/$tool"
-  [ -x "$bin" ] && return 0
-
-  local tmp actual
-  tmp="$(mktemp -d)"
-  curl -fsSL --retry 3 -o "$tmp/archive" "$url"
-  if command -v sha256sum >/dev/null; then
-    actual="$(sha256sum "$tmp/archive" | cut -d' ' -f1)"
-  else
-    actual="$(shasum -a 256 "$tmp/archive" | cut -d' ' -f1)"
+  local cached="$cache/$tool-$version-${url##*/}" copy="$work/$tool-archive"
+  if [ ! -f "$cached" ] || ! cp "$cached" "$copy" || [ "$(sha256 "$copy")" != "$sha" ]; then
+    curl -fsSL --retry 3 -o "$copy" "$url"
+    local actual
+    actual="$(sha256 "$copy")"
+    if [ "$actual" != "$sha" ]; then
+      echo "lint-tool: $url has SHA-256 $actual, expected $sha" >&2
+      exit 1
+    fi
+    mkdir -p "$cache" && cp "$copy" "$cached.$$" && mv "$cached.$$" "$cached" || true
   fi
-  if [ "$actual" != "$sha" ]; then
-    rm -rf "$tmp"
-    echo "lint-tool: $url has SHA-256 $actual, expected $sha" >&2
-    exit 1
-  fi
-  tar -xf "$tmp/archive" -C "$tmp"
-  mkdir -p "$(dirname "$bin")"
-  mv "$tmp/$member" "$bin.$$"
-  mv "$bin.$$" "$bin"
-  rm -rf "$tmp"
+  mkdir "$work/$tool"
+  tar -xf "$copy" -C "$work/$tool"
+  bin="$work/$tool/$member"
 }
 
 tool="${1:?usage: scripts/lint-tool.sh <shellcheck|actionlint|ruff|oxlint> [args...]}"
@@ -86,7 +89,8 @@ if [ "$tool" = actionlint ]; then
   ensure shellcheck
   shellcheck="$bin"
   ensure actionlint
-  exec "$bin" -shellcheck "$shellcheck" "$@"
+  "$bin" -shellcheck "$shellcheck" "$@"
+else
+  ensure "$tool"
+  "$bin" "$@"
 fi
-ensure "$tool"
-exec "$bin" "$@"
