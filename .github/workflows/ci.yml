@@ -77,12 +77,20 @@ jobs:
           elif [ "$FROM_DEPENDABOT" = true ]; then
             case "$ECOSYSTEM:$UPDATE_TYPE" in
               github_actions:*) reason="Actions updates wait for a person" ;;
-              # Same tags, new digests: every changed line differs only in its @sha256 digest (grouped updates included).
+              # Same tags, new digests: every changed file is modified in place, and is the same before and after once each digest is a marker (so a pin can't be dropped, and nothing can move).
               docker:*|docker_compose:*)
-                diff="$(gh pr diff "$PR" -R "$GITHUB_REPOSITORY")"
-                old="$({ grep '^-[^-]' <<< "$diff" || true; } | sed -E 's/^-//; s/@sha256:[0-9a-f]{64}//g' | sort)"
-                new="$({ grep '^+[^+]' <<< "$diff" || true; } | sed -E 's/^\+//; s/@sha256:[0-9a-f]{64}//g' | sort)"
-                if [ -n "$old" ] && [ "$old" = "$new" ]; then merge=true; else reason="it changes more than image digests"; fi ;;
+                merge=true
+                head="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq .head.sha)" || merge=false
+                base="$(gh api "repos/$GITHUB_REPOSITORY/compare/$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq .base.sha)...$head" --jq .merge_base_commit.sha)" || merge=false
+                files="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate --jq '.[] | [.status, .filename] | @tsv')" || merge=false
+                [ -n "$files" ] || merge=false
+                while [ "$merge" = true ] && IFS=$'\t' read -r status file; do
+                  [ "$status" = modified ] || { merge=false; break; }
+                  a="$(gh api "repos/$GITHUB_REPOSITORY/contents/$file?ref=$base" --jq .content | base64 -d | sed -E 's/@sha256:[0-9a-f]{64}/@sha256:DIGEST/g')" || { merge=false; break; }
+                  b="$(gh api "repos/$GITHUB_REPOSITORY/contents/$file?ref=$head" --jq .content | base64 -d | sed -E 's/@sha256:[0-9a-f]{64}/@sha256:DIGEST/g')" || { merge=false; break; }
+                  [ "$a" = "$b" ] || { merge=false; break; }
+                done <<< "$files"
+                [ "$merge" = true ] || reason="it changes more than image digests" ;;
               *:version-update:semver-patch) merge=true ;;
               *:version-update:semver-minor)
                 if [ "${NEW_VERSION%%.*}" = 0 ]; then reason="a 0.x minor can break"; else merge=true; fi ;;
