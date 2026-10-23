@@ -70,7 +70,6 @@ jobs:
           UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
           ECOSYSTEM: ${{ steps.meta.outputs.package-ecosystem }}
           NEW_VERSION: ${{ steps.meta.outputs.new-version }}
-          PREVIOUS_VERSION: ${{ steps.meta.outputs.previous-version }}
         run: |
           merge=false
           if [ "$HAS_APP" != true ]; then
@@ -78,9 +77,22 @@ jobs:
           elif [ "$FROM_DEPENDABOT" = true ]; then
             case "$ECOSYSTEM:$UPDATE_TYPE" in
               github_actions:*) reason="Actions updates wait for a person" ;;
-              # Same tag, new digest: Dependabot names the old digest as the previous version (a new tag names the old tag).
+              # Same tags, new digests: every changed file is modified in place with its mode kept, and its bytes are the same before and after once each digest is a marker (so a pin can't be dropped, nothing can move, and a failed lookup refuses).
               docker:*|docker_compose:*)
-                if [[ "$(tr -d "\`" <<< "$PREVIOUS_VERSION")" =~ ^[0-9a-f]{7,}$ ]]; then merge=true; else reason="a new image tag waits for a person"; fi ;;
+                set -o pipefail
+                merge=true
+                mode() { gh api "repos/$GITHUB_REPOSITORY/git/trees/$1?recursive=1" --jq ".tree[] | select(.path == \"$2\") | .mode"; }
+                norm() { gh api -H "Accept: application/vnd.github.raw" "repos/$GITHUB_REPOSITORY/contents/$2?ref=$1" | sed -E 's/@sha256:[0-9a-f]{64}/@sha256:DIGEST/g' | sha256sum; }
+                head="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq .head.sha)" || merge=false
+                base="$(gh api "repos/$GITHUB_REPOSITORY/compare/$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq .base.sha)...$head" --jq .merge_base_commit.sha)" || merge=false
+                files="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate --jq '.[] | [.status, .filename] | @tsv')" || merge=false
+                [ -n "$files" ] || merge=false
+                while [ "$merge" = true ] && IFS=$'\t' read -r status file; do
+                  [ "$status" = modified ] || { merge=false; break; }
+                  ma="$(mode "$base" "$file")" && mb="$(mode "$head" "$file")" && [ -n "$ma" ] && [ "$ma" = "$mb" ] || { merge=false; break; }
+                  a="$(norm "$base" "$file")" && b="$(norm "$head" "$file")" && [ "$a" = "$b" ] || { merge=false; break; }
+                done <<< "$files"
+                [ "$merge" = true ] || reason="it changes more than image digests" ;;
               *:version-update:semver-patch) merge=true ;;
               *:version-update:semver-minor)
                 if [ "${NEW_VERSION%%.*}" = 0 ]; then reason="a 0.x minor can break"; else merge=true; fi ;;
