@@ -70,7 +70,6 @@ jobs:
           UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
           ECOSYSTEM: ${{ steps.meta.outputs.package-ecosystem }}
           NEW_VERSION: ${{ steps.meta.outputs.new-version }}
-          PREVIOUS_VERSION: ${{ steps.meta.outputs.previous-version }}
         run: |
           merge=false
           if [ "$HAS_APP" != true ]; then
@@ -78,9 +77,12 @@ jobs:
           elif [ "$FROM_DEPENDABOT" = true ]; then
             case "$ECOSYSTEM:$UPDATE_TYPE" in
               github_actions:*) reason="Actions updates wait for a person" ;;
-              # Same tag, new digest: Dependabot names the old digest as the previous version (a new tag names the old tag).
+              # Same tags, new digests: every changed line differs only in its @sha256 digest (grouped updates included).
               docker:*|docker_compose:*)
-                if [[ "$(tr -d "\`" <<< "$PREVIOUS_VERSION")" =~ ^[0-9a-f]{7,}$ ]]; then merge=true; else reason="a new image tag waits for a person"; fi ;;
+                diff="$(gh pr diff "$PR" -R "$GITHUB_REPOSITORY")"
+                old="$({ grep '^-[^-]' <<< "$diff" || true; } | sed -E 's/^-//; s/@sha256:[0-9a-f]{64}//g' | sort)"
+                new="$({ grep '^+[^+]' <<< "$diff" || true; } | sed -E 's/^\+//; s/@sha256:[0-9a-f]{64}//g' | sort)"
+                if [ -n "$old" ] && [ "$old" = "$new" ]; then merge=true; else reason="it changes more than image digests"; fi ;;
               *:version-update:semver-patch) merge=true ;;
               *:version-update:semver-minor)
                 if [ "${NEW_VERSION%%.*}" = 0 ]; then reason="a 0.x minor can break"; else merge=true; fi ;;
