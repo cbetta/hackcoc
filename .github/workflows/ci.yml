@@ -82,7 +82,7 @@ jobs:
                 set -o pipefail
                 merge=true
                 mode() { gh api "repos/$GITHUB_REPOSITORY/git/trees/$1?recursive=1" --jq ".tree[] | select(.path == \"$2\") | .mode"; }
-                norm() { gh api "repos/$GITHUB_REPOSITORY/contents/$2?ref=$1" --jq .content | base64 -d | sed -E 's/@sha256:[0-9a-f]{64}/@sha256:DIGEST/g' | sha256sum; }
+                norm() { gh api -H "Accept: application/vnd.github.raw" "repos/$GITHUB_REPOSITORY/contents/$2?ref=$1" | sed -E 's/@sha256:[0-9a-f]{64}/@sha256:DIGEST/g' | sha256sum; }
                 head="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq .head.sha)" || merge=false
                 base="$(gh api "repos/$GITHUB_REPOSITORY/compare/$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq .base.sha)...$head" --jq .merge_base_commit.sha)" || merge=false
                 files="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate --jq '.[] | [.status, .filename] | @tsv')" || merge=false
