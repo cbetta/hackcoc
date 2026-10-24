@@ -45,6 +45,8 @@ jobs:
 
   publish:
     needs: ci
+    # A manual run can pick any branch; only master ever becomes :master.
+    if: github.ref == 'refs/heads/master'
     runs-on: [self-hosted, jiji-ci]
     permissions:
       contents: read
